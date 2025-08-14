@@ -1,30 +1,35 @@
 #include <iostream>
 #include <array>
 using namespace std;
+/* We will create a face first
+amd then 6 face with different predefined colors characters
+and then take input value of color for each face 
+Then we will solve this cube step-by-step */
 
-// We'll define each face as 3x3
-struct Face {
-    array<array<char, 3>, 3> squares;
-};
 
-// The Cube will have 6 faces
-struct Cube {
-    Face up, down, left, right, front, back;
-};
+ // We'll define each face as 3x3
+    struct Face {
+        array<array<char, 3>, 3> squares;
+    };
+
+    // The Cube will have 6 faces
+    struct Cube {
+        Face F_up, F_down, F_left, F_right, F_front, F_back;
+    };
 
 // Function to create a solved cube
 Cube createSolvedCube() {
     Cube cube;
 
-    // Fill each face with its color
+// Fill each face with its color
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            cube.up.squares[i][j] = 'W';
-            cube.down.squares[i][j] = 'Y';
-            cube.left.squares[i][j] = 'O';
-            cube.right.squares[i][j] = 'R';
-            cube.front.squares[i][j] = 'G';
-            cube.back.squares[i][j] = 'B';
+            cube.F_up.squares[i][j] = 'W';
+            cube.F_down.squares[i][j] = 'Y';
+            cube.F_left.squares[i][j] = 'O';
+            cube.F_right.squares[i][j] = 'R';
+            cube.F_front.squares[i][j] = 'G';
+            cube.F_back.squares[i][j] = 'B';
         }
     }
 
@@ -43,9 +48,13 @@ void printFace(const Face &face) {
 
 int main() {
     Cube myCube = createSolvedCube();
+    cout << "Left Face:" << endl;
+    printFace(myCube.F_left);
 
     cout << "Front Face:" << endl;
-    printFace(myCube.front);
+    printFace(myCube.F_front);
 
+    cout << "Right Face:" << endl;
+    printFace(myCube.F_right);
     return 0;
 }
