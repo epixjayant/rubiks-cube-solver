@@ -1,81 +1,152 @@
 # Rubik's Cube Solver
 
-This project is a Rubik's Cube solver implemented in C. It provides functions to manipulate the cube and solve it using various algorithms.
+This project is a **Rubik's Cube solver** implemented primarily in **C/C++** for the core cube logic and GUI, with **Python (OpenCV)** for camera-based cube scanning. The goal is to create an **interactive, real-time assistant** that reads a scrambled cube via webcam, computes a solution, and displays or speaks the moves for the user.
+
+---
+
+## Project Vision
+- **Core logic in C++** for performance and structure.
+- **GUI in SFML** to visualize the cube in 2D/3D.
+- **Camera input in Python (OpenCV)** to scan cube faces and detect colors.
+- **Solver integration** (Kociemba or other algorithms) to compute optimal move sequences.
+- **User assistance features**: real-time move display, speech instructions, possible 3D rotation animation.
+
+---
 
 ## Project Structure
+rubiks-cube-solver/
 
-```
-rubiks-cube-solver
-├── src
-│   ├── solver.c       # Implementation of solving functions
-│   ├── solver.h       # Header file for solver functions
-│   ├── cube.c         # Implementation of cube data structure and operations
-│   ├── cube.h         # Header file for cube data structure
-│   └── main.c         # Entry point of the application
-├── Makefile            # Build instructions
-└── README.md           # Project documentation
-```
+│
+├── src/
 
-## Building the Project
+│       ├── cube.cpp         # Cube data structure & operations (rotations, checks)
 
-To build the project, navigate to the project directory and run:
+│       ├── cube.h           # Header for cube data
 
-```
-make
-```
+│       ├── solver.cpp       # Solver logic integration (e.g., Kociemba API)
 
-This will compile the source files and create an executable.
+│       ├── solver.h         # Header for solver functions
 
-## Running the Solver
+│       ├── gui.cpp          # SFML-based GUI rendering & animations
+    
+│       ├── gui.h
 
-After building the project, you can run the solver with the following command:
+│       ├── main.cpp         # Entry point for full program
 
-```
-./rubiks-cube-solver
-```
+│
+├── vision/              # Python OpenCV cube scanning
 
-## Usage
+│       ├── detect.py        # Detects colors from webcam and outputs cube state
 
-The solver initializes a Rubik's Cube and applies algorithms to solve it. You can modify the source code to implement additional features or algorithms.
+│
+├── data/
 
-## Contributing
+│       ├── cube_state.txt   # Shared state file between Python and C++ (temp method)
 
-Feel free to contribute to this project by submitting issues or pull requests. Your contributions are welcome!
+│
+├── Makefile / CMakeLists.txt  # Build instructions for C++ parts
+
+├── requirements.txt     # Python dependencies (OpenCV, numpy)
+
+├── README.md            # Project documentation (this file)
 
 
----------------------------------------------------------------------------------------------------------------------------------------------------------------
+## Development Roadmap
 
-# project plan
-### Day 1
-1. plan to implement the cube data structure means to define the cube in a 3D array.   
-2. plan to read the unsolved Rubik's cube from the camera, and store it in the cube data structure.  
-3. plan to implement the functions to rotate the cube for each move like F,F',R,R',U,U',L,L',D,D',B,B'.  
-4. plan to find the formula to solve the cube using the above moves. 
-5. plan how will the moves of the created formulae will shown real time on display to assist the user to solve the rubik's cube. [ How GUI specific feature UI/UX will be implemented ].
-6. plan to check if the cube is solved or not. 
+### **Phase 1 — Planning & Core Structures**
+1. **Cube Representation**  
+   - Define cube in a structured format (e.g., `array<array<char,3>,3>` per face) in C++.  
+   - Assign standard colors: `W` (white), `Y` (yellow), `R` (red), `O` (orange), `G` (green), `B` (blue).  
+2. **Camera Input Plan**  
+   - Plan Python OpenCV script to scan cube face-by-face and output a `cube_state.txt` file.  
+3. **Move Functions**  
+   - Plan rotations for all moves: `F, F', F2, R, R', ...`  
+4. **Solver Plan**  
+   - Choose solver algorithm/library and decide integration point.  
+5. **GUI Plan**  
+   - Decide 2D net vs. 3D view for the initial version in SFML.  
+6. **Solved State Check**  
+   - Plan function to check if cube is solved.
 
-### Day 2
-1. implement the cube data structure in C : write the main function, and define the array,  
-2. and define the functions to take the reading from the camera and store it in the array.  
-3. implement the functions to rotate the cube for each move like F,F',R,R',U
+---
 
-### Day 3
-1. Write the algorithm to find the formulae to solve the cube.  
-2. write the code to design UI/UX and GUI related things. Assist the user to live interactively solve the Rubik's cube.  
-3. implement the code to check if the cube is solved or not.
+### **Phase 2 — Cube Structure & Input**
+1. Implement `Cube` struct/class in C++.  
+2. Implement Python OpenCV face scanning script:
+   - Detect ROI for each sticker.
+   - Convert BGR to HSV and classify colors.
+   - Save colors to `cube_state.txt`.  
+3. Implement C++ code to read `cube_state.txt` and populate cube state.
 
-### Day 4
-1. compile and Debug
-2. run the program and test it.
-3. fix the bugs and errors.
+---
 
+### **Phase 3 — Rotations & Solver**
+1. Implement rotation functions for:
+   - `F, F', R, R', U, U', L, L', D, D', B, B'`.  
+   - Include both face rotation and adjacent edge updates.  
+2. Integrate solver algorithm:
+   - Convert cube state to solver string format.
+   - Compute solution sequence.
 
-### Day 5
+---
 
-### Day 6
+### **Phase 4 — GUI & Interaction**
+1. Implement SFML rendering of cube:
+   - Draw each face as 3×3 colored squares.
+   - Add simple animations for moves.  
+2. Implement user assistance:
+   - Show next move textually.
+   - Add keyboard control to apply moves manually for testing.
 
---------------------------------------------------------------------------------------------------------------------------------------------------------------  
-# Upcoming Features
-1. ##### 3D live rotating cube display
-2. ##### speaking moves for the formula
+---
 
+### **Phase 5 — Integration & Testing**
+1. Run full pipeline:
+   - Python OpenCV scans cube.
+   - C++ reads cube state.
+   - Solver generates move sequence.
+   - SFML GUI shows moves one-by-one.
+2. Debug and fix rotation or display errors.
+
+---
+
+### **Phase 6 — Polish & Extra Features**
+1. Add **speech output** for moves.
+2. Optional **3D rotating cube** view in SFML.
+3. Clean code, improve documentation, and prepare demo video.
+
+---
+
+## Upcoming Features
+1. **3D Live Rotating Cube Display**
+   - Implemented with SFML/OpenGL.
+   - Allows user to rotate view with mouse/keyboard.
+2. **Speaking Moves**
+   - Text-to-Speech engine announces each move for hands-free solving.
+3. **Direct Python–C++ Integration**
+   - Replace file-based communication with `pybind11` for faster, real-time linking.
+4. **Mobile Version**
+   - Possible Android port with OpenCV and native rendering.
+
+---
+
+## How Contributors Should Work
+- **Branches:**
+  - `main` → stable, working code.
+  - `dev` → integration/testing branch.
+  - `feature/...` → for each specific task (e.g., `feature/gui`, `feature/rotation-F`).
+- **Pull Requests:**  
+  Always branch from `dev` and open PRs into `dev`, never `main` directly.
+- **Code Style:**  
+  Follow existing formatting, name variables clearly, and comment complex logic.
+
+---
+
+## Quick Workflow Diagram
+Python (OpenCV Camera)
+↓
+cube_state.txt (temp)
+↓
+C++ Core Logic + SFML GUI 
+↓
+User sees moves / hears instructions
